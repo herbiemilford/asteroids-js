@@ -37,7 +37,7 @@ class Ship{
         this.speed = 0.1;
         this.velX = 0;
         this.velY = 0;
-        this.rotationSpeed = .001;
+        this.rotationSpeed = 0.001;
         this.radius = 15;
         this.angle = 0;
         this.strokeColor = 'white';
@@ -45,7 +45,26 @@ class Ship{
     }
 
     Update(){
+let radians = this.angle/ Math.PI * 180;
+if (this.movingForward){
+    this.velX += Math.cos(radians) * this.speed;
+    this.velY += Math.sin(radians) * this.speed;
+    //newX = oldX + cos(radians) * distance;
+    //newY = oldY + cos(radians) * distance;
 
+}
+if(this.x < this.radius){
+    this.x = canvas.width;
+}
+if(this.x > canvas.width){
+    this.x = this.radius;
+}
+if(this.y < this.radius){
+    this.y = canvas.height;
+}
+if(this.y > canvas.height){
+    this.y = this.radius;
+}
     }
 
 }
