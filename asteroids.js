@@ -6,7 +6,7 @@ let keys =[];
 
 document.addEventListener('DOMContentLoaded', SetupCanvas);
 
-function SetUpCanvas(){
+function SetupCanvas(){
     canvas = document.getElementById('my-canvas');
     
     ctx = canvas.getContext('2d');
@@ -37,7 +37,7 @@ class Ship{
         this.speed = 0.1;
         this.velX = 0;
         this.velY = 0;
-        this.rotationSpeed = 0.001;
+        this.rotateSpeed = 0.001;
         this.radius = 15;
         this.angle = 0;
         this.strokeColor = 'white';
