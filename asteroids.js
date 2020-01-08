@@ -42,6 +42,12 @@ class Ship{
         this.angle = 0;
         this.strokeColor = 'white';
 
+
+
+    }
+
+    Rotate(dir){
+        this.angle += this.rotateSpeed * dir;
     }
 
     Update(){
@@ -65,6 +71,24 @@ if(this.y < this.radius){
 if(this.y > canvas.height){
     this.y = this.radius;
 }
+
+this.velX *= 0.99;
+this.velY *= 0.99;
+
+this.x -= this.velX;
+this.y -= this.velY;
+    }
+    Draw(){
+        ctx.strokeStyle = this.strokeColor;
+        ctx.beginPath();
+        let vertAngle = ((Math.PI * 2)/3);
+        let radians = this.angle / Math.PI * 180;
+        for(let i = 0; i < 3; i++){
+            ctx.lineTo(this.x-this.radius * Math.cos(vertAngle * i + radians), this.y - this.radius * Math.sin(vertAngle * i + radians));
+
+        }
+        ctx.closePath();
+        ctx.stroke();
     }
 
 }
@@ -72,5 +96,17 @@ if(this.y > canvas.height){
 let ship = new Ship();
 
 function Render(){
-        
+   ship.movingForward = (keys[87]);//W key
+   if(keys[68]){
+       ship.Rotate(1);
+   }
+   if(keys[65]){
+    ship.Rotate(-1);
+}
+ctx.clearRect(0,0,canvasWidth,canvasHeight);
+ship.Update();
+ship.Draw();
+
+requestAnimationFrame(Render);
+
 }
