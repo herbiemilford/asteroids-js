@@ -2,7 +2,11 @@ let canvas ;
 let ctx;
 let canvasWidth = 1400;
 let canvasHeight = 1000;
+let ship;
 let keys =[];
+let bullets = [];
+let asteroids = [];
+
 
 document.addEventListener('DOMContentLoaded', SetupCanvas);
 
@@ -14,7 +18,7 @@ function SetupCanvas(){
     canvas.height = canvasHeight;
     ctx.fillStyle = 'black';
     ctx.fillRect(0,0,canvas.width, canvas.height);
-
+    let ship = new Ship();
 
     document.body.addEventListener("keydown", function(e){
         keys[e.keyCode] = true;
@@ -41,11 +45,9 @@ class Ship{
         this.radius = 15;
         this.angle = 0;
         this.strokeColor = 'white';
-
-
-
+        this.noseX = canvasWidth/2 + 15;
+        this.noseY = canvasHeight/2;
     }
-
     Rotate(dir){
         this.angle += this.rotateSpeed * dir;
     }
@@ -83,8 +85,12 @@ this.y -= this.velY;
         ctx.beginPath();
         let vertAngle = ((Math.PI * 2)/3);
         let radians = this.angle / Math.PI * 180;
+        this.noseX = this.x - this.radius * Math.cos(radians);
+        this.noseY = this.y - this.radius * Math.sin(radians);
+
         for(let i = 0; i < 3; i++){
-            ctx.lineTo(this.x-this.radius * Math.cos(vertAngle * i + radians), this.y - this.radius * Math.sin(vertAngle * i + radians));
+            ctx.lineTo(this.x-this.radius * Math.cos(vertAngle * i + radians),
+             this.y - this.radius * Math.sin(vertAngle * i + radians));
 
         }
         ctx.closePath();
@@ -93,7 +99,32 @@ this.y -= this.velY;
 
 }
 
-let ship = new Ship();
+class Bullet{
+    constructor(angle){
+        this.visible=true;
+        this.x = ship.noseX;
+        this.y = ship.noseY;
+        this.angle = angle;
+        this.height = 4;
+        this.width = 4;
+        this.speed = 5;
+        this.velX = 0;
+        this.velY = 0;
+    }
+    Update(){
+        let radians = this.angle/Math.PI * 180;
+        this.x -= Math.cos(radians) * this.speed;
+        this.y -= Math.sin(radians) * this.speed; 
+    }
+    Draw(){
+        ctx.fillStyle = 'white';
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+} 
+
+class Asteroid{
+    
+}
 
 function Render(){
    ship.movingForward = (keys[87]);//W key
