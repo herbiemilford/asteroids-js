@@ -3,6 +3,7 @@ let ctx;
 let canvasWidth = 1400;
 let canvasHeight = 1000;
 let ship;
+
 let keys =[];
 let bullets = [];
 let asteroids = [];
@@ -18,7 +19,11 @@ function SetupCanvas(){
     canvas.height = canvasHeight;
     ctx.fillStyle = 'black';
     ctx.fillRect(0,0,canvas.width, canvas.height);
-    let ship = new Ship();
+    ship = new Ship();
+
+    for(let i = 0; i < 8; i++){
+        asteroids.push(new Asteroid());
+    }
 
     document.body.addEventListener("keydown", function(e){
         keys[e.keyCode] = true;
@@ -26,6 +31,9 @@ function SetupCanvas(){
 
     document.body.addEventListener("keyup", function(e){
         keys[e.keyCode] = false;
+        if(e.keyCode === 32){
+            bullets.push(new Bullet(ship.angle));
+        }
     });
 
 Render();
@@ -112,7 +120,7 @@ class Bullet{
         this.velY = 0;
     }
     Update(){
-        let radians = this.angle/Math.PI * 180;
+        var radians = this.angle/Math.PI * 180;
         this.x -= Math.cos(radians) * this.speed;
         this.y -= Math.sin(radians) * this.speed; 
     }
@@ -123,11 +131,54 @@ class Bullet{
 } 
 
 class Asteroid{
-    
+    constructor(x,y, radius, level, collisionRadius){
+        this.visible = true;
+        this.x = x || Math.floor(Math.random() * canvasWidth);
+        this.y = y || Math.floor(Math.random() * canvasHeight);
+        this.speed = 5;
+        this.radius = radius || 50;
+        this.angle = Math.floor(Math.random() * 359);
+        this.strokeColor = 'white';
+        this.collisionRadius = collisionRadius || 46;
+        this.level = level || 1;
+    }
+    Update(){
+        var radians = this.angle/Math.PI *180;
+        this.x += Math.cos(radians * this.speed);
+        this.y += Math.sin(radians * this.speed);
+
+        if(this.x < this.radius){
+            this.x = canvas.width;
+        }
+        if(this.x > canvas.width){
+            this.x = this.radius;
+        }
+        if(this.y < this.radius){
+            this.y = canvas.height;
+        }
+        if(this.y > canvas.height){
+            this.y = this.radius;
+        }
+
+    }
+
+    Draw(){
+        ctx.beginPath();
+        let vertAngle = ((Math.PI * 2)/6);
+        var radians = this.angle / Math.PI * 180;
+
+        for(let i = 0; i < 6; i++){
+            ctx.lineTo(this.x-this.radius * Math.cos(vertAngle * i + radians),
+             this.y - this.radius * Math.sin(vertAngle * i + radians));
+        }
+        ctx.closePath();
+        ctx.stroke();
+ }
+
 }
 
 function Render(){
-   ship.movingForward = (keys[87]);//W key
+   ship.movingForward = (keys[87]);
    if(keys[68]){
        ship.Rotate(1);
    }
@@ -137,6 +188,19 @@ function Render(){
 ctx.clearRect(0,0,canvasWidth,canvasHeight);
 ship.Update();
 ship.Draw();
+if(bullets.length !== 0){
+    for(let i = 0; i < bullets.length; i++){
+        bullets[i].Update();
+        bullets[i].Draw();
+    }
+}
+
+if(asteroids.length !== 0){
+    for(let j =0; j < asteroids.length; j++){
+        asteroids[j].Update();
+        asteroids[j].Draw();
+    }
+}
 
 requestAnimationFrame(Render);
 
