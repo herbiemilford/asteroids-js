@@ -281,9 +281,12 @@ if (asteroids.length !==0  && bullets.length !=0){
 
 }
 
+if (ship.visible){
 
-ship.Update();
-ship.Draw();
+    ship.Update();
+    ship.Draw();
+}
+
 if(bullets.length !== 0){
     for(let i = 0; i < bullets.length; i++){
         bullets[i].Update();
@@ -294,7 +297,7 @@ if(bullets.length !== 0){
 if(asteroids.length !== 0){
     for(let j =0; j < asteroids.length; j++){
         asteroids[j].Update();
-        asteroids[j].Draw();
+        asteroids[j].Draw(j);
     }
 }
 
