@@ -3,7 +3,6 @@ let ctx;
 let canvasWidth = 1400;
 let canvasHeight = 1000;
 let ship;
-
 let keys =[];
 let bullets = [];
 let asteroids = [];
@@ -100,7 +99,7 @@ this.y -= this.velY;
         this.noseY = this.y - this.radius * Math.sin(radians);
 
         for(let i = 0; i < 3; i++){
-            ctx.lineTo(this.x-this.radius * Math.cos(vertAngle * i + radians),
+            ctx.lineTo(this.x - this.radius * Math.cos(vertAngle * i + radians),
              this.y - this.radius * Math.sin(vertAngle * i + radians));
 
         }
@@ -134,7 +133,7 @@ class Bullet{
 } 
 
 class Asteroid{
-    constructor(x,y, radius, level, collisionRadius){
+    constructor(x, y, radius, level, collisionRadius){
         this.visible = true;
         this.x = x || Math.floor(Math.random() * canvasWidth);
         this.y = y || Math.floor(Math.random() * canvasHeight);
@@ -145,12 +144,13 @@ class Asteroid{
         this.collisionRadius = collisionRadius || 46;
         this.level = level || 1;
     }
+
+
     Update(){
         var radians = this.angle/Math.PI *180;
         this.x += Math.cos(radians * this.speed);
         this.y += Math.sin(radians * this.speed);
-
-        if(this.x < this.radius){
+if(this.x < this.radius){
             this.x = canvas.width;
         }
         if(this.x > canvas.width){
@@ -183,15 +183,14 @@ function CircleCollision(p1x, p1y, r1, p2x, p2y, r2){
     let radiusSum;
     let xDiff;
     let yDiff;
-    radiusSum = r1 +r2;
+    radiusSum = r1 + r2;
     xDiff = p1x - p2x;
     yDiff = p1y - p2y;
-    if(radiusSum > Math.sqrt((xDiff * yDiff) + (yDiff * yDiff))){
+    if(radiusSum > Math.sqrt((xDiff * xDiff) + (yDiff * yDiff))){
     return true;
 } else {
     return false;
 }
-
 
 }
 
@@ -238,8 +237,8 @@ if(asteroids.length !== 0){
     for(let k = 0; k < asteroids.length; k++){
         if(CircleCollision(ship.x, ship.y, 11, asteroids[k].x, 
             asteroids[k].y, asteroids[k].collisionRadius)){
-ship.x=canvasWidth/2;
-ship.y=canvasHeight/2;
+ship.x = canvasWidth / 2;
+ship.y = canvasHeight / 2;
 ship.velX = 0;
 ship.velY = 0;
 lives -= 1;
@@ -250,23 +249,24 @@ if (asteroids.length !==0  && bullets.length !=0){
 
     loop1:
 
-    for(let l =0; l < asteriods.length; l++){
+    for(let l =0; l < asteroids.length; l++){
 
         for(let m = 0; m < bullets.length; m++){
-            if(CircleCollision(bullets[m].x, bullets[m].y, 3, asteroids[l].x, asteroids[l].y, asteroids[l].collisionRadius)){
+            if(CircleCollision(bullets[m].x, bullets[m].y, 3, asteroids[l].x, asteroids[l].y,
+                asteroids[l].collisionRadius)){
               if (asteroids[l].level ===1){
 
               
               asteroids.push(new Asteroid(asteroids[l].x - 5,
-                 asteroids[l.y - 5], 25, 2, 22));
+                 asteroids[l].y - 5, 25, 2, 22));
               asteroids.push(new Asteroid(asteroids[l].x + 5,
-                 asteroids[l.y + 5], 25, 2, 22));
+                 asteroids[l].y + 5, 25, 2, 22));
               }
               else if(asteroids[l].level ===2){
                 asteroids.push(new Asteroid(asteroids[l].x - 5,
-                     asteroids[l.y - 5], 15, 3, 12));
+                     asteroids[l].y - 5, 15, 3, 12));
                 asteroids.push(new Asteroid(asteroids[l].x + 5,
-                     asteroids[l.y + 5], 15, 3, 12));
+                     asteroids[l].y + 5, 15, 3, 12));
               }
               asteroids.splice(l, 1);
               bullets.splice(m, 1);
@@ -295,7 +295,7 @@ if(bullets.length !== 0){
 }
 
 if(asteroids.length !== 0){
-    for(let j =0; j < asteroids.length; j++){
+    for(let j = 0; j < asteroids.length; j++){
         asteroids[j].Update();
         asteroids[j].Draw(j);
     }
