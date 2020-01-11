@@ -7,6 +7,9 @@ let ship;
 let keys =[];
 let bullets = [];
 let asteroids = [];
+let score = 0;
+let lives = 3;
+
 
 
 document.addEventListener('DOMContentLoaded', SetupCanvas);
@@ -176,6 +179,22 @@ class Asteroid{
  }
 
 }
+function CircleCollision(p1x, p1y, r1, p2x, p2y, r2){
+    let radiusSum;
+    let xDiff;
+    let yDiff;
+    radiusSum = r1 +r2;
+    xDiff = p1x - p2x;
+    yDiff = p1y - p2y;
+    if(radiusSum > Math.sqrt((xDiff * yDiff) + (yDiff * yDiff))){
+    return true;
+} else {
+    return false;
+}
+
+
+}
+
 
 function Render(){
    ship.movingForward = (keys[87]);
